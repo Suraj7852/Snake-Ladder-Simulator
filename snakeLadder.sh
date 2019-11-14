@@ -1,11 +1,13 @@
 #!/bin/bash -x
-
 echo "Welcome to Snake & Ladder Simulator"
 
-PLAYER=1;
+PLAYER=2;
 position=0;
-winCount=0;
+winCountby1=0;
+winCountby2=0;
 timesCounter=0;
+player1Count=0;
+player2Count=0;
 declare -A noOfTimeRolled
 
 function positionChk() {
@@ -25,24 +27,38 @@ function positionChk() {
 
 while [ true ]
 do
-    #prevWinCount=$winCount
-    positionRecieved=$( positionChk )
+    positionRecievedby1=$( positionChk )
+    winCountby1=$(( $winCountby1+$positionRecievedby1 ))
+
+    positionRecievedby2=$( positionChk )
+    winCountby2=$(( $winCountby2+$positionRecievedby2 ))
 
     timesCounter=$(( $timesCounter+1 ))
-    winCount=$(( $winCount+$positionRecieved ))
-    noOfTimeRolled[$timesCounter]=$winCount
+    
+    
+    noOfTimeRolled[$timesCounter]=$winCountby1
 
-    if [ $winCount -gt 100 ]
+    if [ $winCountby1 -gt 100 ]
     then
-        winCount=$(( $wincount-$positionRecieved ))
-    elif [ $winCount -lt 0 ]
+        winCountby1=$(( $winCountby1-$positionRecievedby1 ))
+    elif [ $winCountby1 -lt 0 ]
     then
-        winCount=0;
-    elif [ $winCount -eq 100 ]
+        winCountby1=0;
+    elif [ $winCountby1 -eq 100 ]
     then
+        echo "Player 1 Won!!!"
         break;
     fi
-done
-#echo ${!noOfTimeRolled[@]}
-echo ${noOfTimeRolled[@]}
-echo $timesCounter
+
+    if [ $winCountby2 -gt 100 ]
+    then
+        winCountby2=$(( $winCountby2-$positionRecievedby2 ))
+    elif [ $winCountby2 -lt 0 ]
+    then
+        winCountby2=0;
+    elif [ $winCountby2 -eq 100 ]
+    then
+    echo "Player 2 Won!!!"
+        break;
+    fi
+done  
