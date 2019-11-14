@@ -5,28 +5,30 @@ echo "Welcome to Snake & Ladder Simulator"
 PLAYER=1;
 position=0;
 
-while [ true ]
-do
+function positionChk() {
     rolls=$(( RANDOM%6 +1 ))
     option=$(( RANDOM%3 ))
     if [ $option -eq 0 ]
     then
         position=$(( $position ))
-        echo "No play"
     elif [ $option -eq 1 ]
     then
-        position=$(( $position + $rolls ))
-        echo "Snake"
-    else
         position=$(( $position - $rolls ))
-        echo "Ladder"
+    else
+        position=$(( $position + $rolls ))
     fi
-    
-    if [ $position -gt 100 ]
+    echo $position
+}
+
+while [ true ]
+do
+    positionRecieved=$( positionChk )
+    winCount=$(( $winCount+$positionRecieved ))
+    if [ $winCount -gt 100 ]
 	then
 		break;
-    elif [ $position -lt 0 ]
+    elif [ $winCount -lt 0 ]
     then
-        position=0;
+        winCount=0;
 	fi
 done
