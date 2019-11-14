@@ -5,7 +5,8 @@ echo "Welcome to Snake & Ladder Simulator"
 PLAYER=1;
 position=0;
 winCount=0;
-prevWinCount=0;
+timesCounter=0;
+declare -A noOfTimeRolled
 
 function positionChk() {
     rolls=$(( RANDOM%6 +1 ))
@@ -26,7 +27,11 @@ while [ true ]
 do
     #prevWinCount=$winCount
     positionRecieved=$( positionChk )
+
+    timesCounter=$(( $timesCounter+1 ))
     winCount=$(( $winCount+$positionRecieved ))
+    noOfTimeRolled[$timesCounter]=$winCount
+
     if [ $winCount -gt 100 ]
     then
         winCount=$(( $wincount-$positionRecieved ))
@@ -38,3 +43,6 @@ do
         break;
     fi
 done
+#echo ${!noOfTimeRolled[@]}
+echo ${noOfTimeRolled[@]}
+echo $timesCounter
