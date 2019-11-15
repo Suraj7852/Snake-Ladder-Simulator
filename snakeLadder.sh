@@ -15,12 +15,12 @@ function positionChk() {
     option=$(( RANDOM%3 ))
     if [ $option -eq 0 ]
     then
-        position=$(( $position ))
+        position=0
     elif [ $option -eq 1 ]
     then
-        position=$(( $position - $rolls ))
+        position=$(( -$rolls ))
     else
-        position=$(( $position + $rolls ))
+        position=$(( $rolls ))
     fi
     echo $position
 }
@@ -29,9 +29,21 @@ while [ true ]
 do
     positionRecievedby1=$( positionChk )
     winCountby1=$(( $winCountby1+$positionRecievedby1 ))
+    if [ $positionRecievedby1 -gt 0 ]
+    then
+        positionRecievedby1=$( positionChk )
+        winCountby1=$(( $winCountby1+$positionRecievedby1 ))
+        echo "ladderby player 1:  "
+    fi
 
     positionRecievedby2=$( positionChk )
     winCountby2=$(( $winCountby2+$positionRecievedby2 ))
+    if [ $positionRecievedby2 -gt 0 ]
+    then
+        positionRecievedby2=$( positionChk )
+        winCountby2=$(( $winCountby2+$positionRecievedby2 ))
+        echo "ladderby player 2:  "
+    fi
 
     timesCounter=$(( $timesCounter+1 ))
     
@@ -61,4 +73,4 @@ do
     echo "Player 2 Won!!!"
         break;
     fi
-done  
+done
