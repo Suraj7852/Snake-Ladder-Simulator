@@ -1,10 +1,10 @@
 #!/bin/bash -x
 echo "Welcome to Snake & Ladder Simulator"
 
-PLAYER=2;
-position=0;
-winCountby1=0;
-winCountby2=0;
+GOAL=100;
+POSITION=0;
+winCountbyPlayer1=0;
+winCountbyPlayer2=0;
 timesCounter=0;
 player1Count=0;
 player2Count=0;
@@ -15,60 +15,60 @@ function positionChk() {
     option=$(( RANDOM%3 ))
     if [ $option -eq 0 ]
     then
-        position=0
+        POSITION=0
     elif [ $option -eq 1 ]
     then
-        position=$(( -$rolls ))
+        POSITION=$(( -$rolls ))
     else
-        position=$(( $rolls ))
+        POSITION=$(( $rolls ))
     fi
-    echo $position
+    echo $POSITION
 }
 
 while [ true ]
 do
-    positionRecievedby1=$( positionChk )
-    winCountby1=$(( $winCountby1+$positionRecievedby1 ))
-    if [ $positionRecievedby1 -gt 0 ]
+    positionRecievedbyPlayer1=$( positionChk )
+    winCountbyPlayer1=$(( $winCountbyPlayer1+$positionRecievedbyPlayer1 ))
+    if [ $positionRecievedbyPlayer1 -gt 0 ]
     then
-        positionRecievedby1=$( positionChk )
-        winCountby1=$(( $winCountby1+$positionRecievedby1 ))
+        positionRecievedbyPlayer1=$( positionChk )
+        winCountbyPlayer1=$(( $winCountbyPlayer1+$positionRecievedbyPlayer1 ))
         echo "ladderby player 1:  "
     fi
 
-    positionRecievedby2=$( positionChk )
-    winCountby2=$(( $winCountby2+$positionRecievedby2 ))
-    if [ $positionRecievedby2 -gt 0 ]
+    positionRecievedbyPlayer2=$( positionChk )
+    winCountbyPlayer2=$(( $winCountbyPlayer2+$positionRecievedbyPlayer2 ))
+    if [ $positionRecievedbyPlayer2 -gt 0 ]
     then
-        positionRecievedby2=$( positionChk )
-        winCountby2=$(( $winCountby2+$positionRecievedby2 ))
+        positionRecievedbyPlayer2=$( positionChk )
+        winCountbyPlayer2=$(( $winCountbyPlayer2+$positionRecievedbyPlayer2 ))
         echo "ladderby player 2:  "
     fi
 
     timesCounter=$(( $timesCounter+1 ))
     
     
-    noOfTimeRolled[$timesCounter]=$winCountby1
+    noOfTimeRolled[$timesCounter]=$winCountbyPlayer1
 
-    if [ $winCountby1 -gt 100 ]
+    if [ $winCountbyPlayer1 -gt $GOAL ]
     then
-        winCountby1=$(( $winCountby1-$positionRecievedby1 ))
-    elif [ $winCountby1 -lt 0 ]
+        winCountbyPlayer1=$(( $winCountbyPlayer1-$positionRecievedbyPlayer1 ))
+    elif [ $winCountbyPlayer1 -lt 0 ]
     then
-        winCountby1=0;
-    elif [ $winCountby1 -eq 100 ]
+        winCountbyPlayer1=0;
+    elif [ $winCountbyPlayer1 -eq $GOAL ]
     then
         echo "Player 1 Won!!!"
         break;
     fi
 
-    if [ $winCountby2 -gt 100 ]
+    if [ $winCountbyPlayer2 -gt $GOAL ]
     then
-        winCountby2=$(( $winCountby2-$positionRecievedby2 ))
-    elif [ $winCountby2 -lt 0 ]
+        winCountbyPlayer2=$(( $winCountbyPlayer2-$positionRecievedbyPlayer2 ))
+    elif [ $winCountbyPlayer2 -lt 0 ]
     then
-        winCountby2=0;
-    elif [ $winCountby2 -eq 100 ]
+        winCountbyPlayer2=0;
+    elif [ $winCountbyPlayer2 -eq $GOAL ]
     then
     echo "Player 2 Won!!!"
         break;
