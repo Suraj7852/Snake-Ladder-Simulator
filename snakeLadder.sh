@@ -25,6 +25,19 @@ function positionChk() {
     echo $POSITION
 }
 
+function winningPlayer() {
+    winCountbyPlayer=$1
+    positionRecievedbyPlayer=$2
+    if [ $winCountbyPlayer -gt $GOAL ]
+    then
+        winCountbyPlayer=$(( $winCountbyPlayer-$positionRecievedbyPlayer1 ))
+    elif [ $winCountbyPlayer1 -lt 0 ]
+    then
+        winCountbyPlayer=0;
+    fi
+    echo $winCountbyPlayer;
+}
+
 while [ true ]
 do
     positionRecievedbyPlayer1=$( positionChk )
@@ -50,27 +63,17 @@ do
     
     noOfTimeRolled[$timesCounter]=$winCountbyPlayer1
 
-    if [ $winCountbyPlayer1 -gt $GOAL ]
+    winCountbyPlayer1=$( winningPlayer $winCountbyPlayer1 $positionRecievedbyPlayer1 )
+    if [ $winCountbyPlayer1 -eq $GOAL ]
     then
-        winCountbyPlayer1=$(( $winCountbyPlayer1-$positionRecievedbyPlayer1 ))
-    elif [ $winCountbyPlayer1 -lt 0 ]
-    then
-        winCountbyPlayer1=0;
-    elif [ $winCountbyPlayer1 -eq $GOAL ]
-    then
-        echo "Player 1 Won!!!"
+        echo "Player 1 Won!!! "
         break;
     fi
-
-    if [ $winCountbyPlayer2 -gt $GOAL ]
+    
+    winCountbyPlayer2=$( winningPlayer $winCountbyPlayer2 $positionRecievedbyPlayer2 )
+    if [ $winCountbyPlayer2 -eq $GOAL ]
     then
-        winCountbyPlayer2=$(( $winCountbyPlayer2-$positionRecievedbyPlayer2 ))
-    elif [ $winCountbyPlayer2 -lt 0 ]
-    then
-        winCountbyPlayer2=0;
-    elif [ $winCountbyPlayer2 -eq $GOAL ]
-    then
-    echo "Player 2 Won!!!"
+        echo "Player 2 Won!!! "
         break;
     fi
 done
