@@ -11,18 +11,19 @@ player2Count=0;
 declare -A noOfTimeRolled
 
 function positionCheck() {
-    rolls=$(( RANDOM%6 +1 ))
-    option=$(( RANDOM%3 ))
+    local rolls=$(( RANDOM%6 +1 ))
+    local option=$(( RANDOM%3 ))
+    local position=$POSITION
     if [ $option -eq 0 ]
     then
-        POSITION=0
+        position=0
     elif [ $option -eq 1 ]
     then
-        POSITION=$(( -$rolls ))
+        position=$(( -$rolls ))
     else
-        POSITION=$(( $rolls ))
+        position=$(( $rolls ))
     fi
-    echo $POSITION
+    echo $position
 }
 
 function winningPlayer() {
