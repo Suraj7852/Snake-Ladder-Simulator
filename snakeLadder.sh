@@ -10,7 +10,7 @@ player1Count=0;
 player2Count=0;
 declare -A noOfTimeRolled
 
-function positionChk() {
+function positionCheck() {
     rolls=$(( RANDOM%6 +1 ))
     option=$(( RANDOM%3 ))
     if [ $option -eq 0 ]
@@ -30,38 +30,29 @@ function winningPlayer() {
     positionRecievedbyPlayer=$2
     if [ $winCountbyPlayer -gt $GOAL ]
     then
-        winCountbyPlayer=$(( $winCountbyPlayer-$positionRecievedbyPlayer1 ))
-    elif [ $winCountbyPlayer1 -lt 0 ]
+        winCountbyPlayer=$(( $winCountbyPlayer-$positionRecievedbyPlayer ))
+    elif [ $winCountbyPlayer -lt 0 ]
     then
         winCountbyPlayer=0;
     fi
     echo $winCountbyPlayer;
 }
 
+function ladderPlayAgain() {
+    winCountbyPlayer=$1;
+	 if [ $2 -gt 0 ]
+    then
+		  bonosRound=$( positionCheck )
+        winCountbyPlayer=$(( $1+$bonosRound ))
+    fi
+	echo $winCountbyPlayer;
+}
+
 while [ true ]
 do
-    positionRecievedbyPlayer1=$( positionChk )
+    positionRecievedbyPlayer1=$( positionCheck )
     winCountbyPlayer1=$(( $winCountbyPlayer1+$positionRecievedbyPlayer1 ))
-    if [ $positionRecievedbyPlayer1 -gt 0 ]
-    then
-        positionRecievedbyPlayer1=$( positionChk )
-        winCountbyPlayer1=$(( $winCountbyPlayer1+$positionRecievedbyPlayer1 ))
-        echo "ladderby player 1:  "
-    fi
-
-    positionRecievedbyPlayer2=$( positionChk )
-    winCountbyPlayer2=$(( $winCountbyPlayer2+$positionRecievedbyPlayer2 ))
-    if [ $positionRecievedbyPlayer2 -gt 0 ]
-    then
-        positionRecievedbyPlayer2=$( positionChk )
-        winCountbyPlayer2=$(( $winCountbyPlayer2+$positionRecievedbyPlayer2 ))
-        echo "ladderby player 2:  "
-    fi
-
-    timesCounter=$(( $timesCounter+1 ))
-    
-    
-    noOfTimeRolled[$timesCounter]=$winCountbyPlayer1
+	 winCountbyPlayer1=$( ladderPlayAgain $winCountbyPlayer1 $positionRecievedbyPlayer1 )
 
     winCountbyPlayer1=$( winningPlayer $winCountbyPlayer1 $positionRecievedbyPlayer1 )
     if [ $winCountbyPlayer1 -eq $GOAL ]
@@ -69,7 +60,18 @@ do
         echo "Player 1 Won!!! "
         break;
     fi
-    
+
+
+    positionRecievedbyPlayer2=$( positionCheck )
+    winCountbyPlayer2=$(( $winCountbyPlayer2+$positionRecievedbyPlayer2 ))
+	 winCountbyPlayer2=$( ladderPlayAgain $winCountbyPlayer2 $positionRecievedbyPlayer2)
+
+
+    timesCounter=$(( $timesCounter+1 ))
+
+    noOfTimeRolled[$timesCounter]=$winCountbyPlayer1
+
+ 
     winCountbyPlayer2=$( winningPlayer $winCountbyPlayer2 $positionRecievedbyPlayer2 )
     if [ $winCountbyPlayer2 -eq $GOAL ]
     then
